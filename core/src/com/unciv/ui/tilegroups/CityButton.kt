@@ -39,14 +39,13 @@ class CityButton(val city: CityInfo, private val tileGroup: WorldTileGroup): Tab
 
         clear()
         setButtonActions()
-        addAirUnitTable()
         if (showAdditionalInfoTags && city.health < city.getMaxHealth().toFloat()) {
             val healthBar = ImageGetter.getHealthBar(city.health.toFloat(), city.getMaxHealth().toFloat(), 100f)
             add(healthBar).row()
         }
 
         iconTable = getIconTable()
-        add(iconTable).row()
+        add(iconTable).padBottom(-8f).row()
 
         if (city.civInfo.isCityState() && city.civInfo.knows(worldScreen.viewingCiv)) {
             val diplomacyManager = city.civInfo.getDiplomacyManager(worldScreen.viewingCiv)
@@ -125,18 +124,6 @@ class CityButton(val city: CityInfo, private val tileGroup: WorldTileGroup): Tab
         listOfHiddenUnitMarkers.add(indicator)
     }
 
-    private fun addAirUnitTable() {
-        if (!showAdditionalInfoTags || tileGroup.tileInfo.airUnits.isEmpty()) return
-        val secondarycolor = city.civInfo.nation.getInnerColor()
-        val airUnitTable = Table()
-        airUnitTable.background = ImageGetter.getRoundedEdgeRectangle(city.civInfo.nation.getOuterColor()).apply { setMinSize(0f,0f) }
-        val aircraftImage = ImageGetter.getImage("OtherIcons/Aircraft")
-        aircraftImage.color = secondarycolor
-        airUnitTable.add(aircraftImage).size(15f)
-        airUnitTable.add(tileGroup.tileInfo.airUnits.size.toString().toLabel(secondarycolor,14))
-        add(airUnitTable).row()
-    }
-
     private fun belongsToViewingCiv() = city.civInfo == worldScreen.viewingCiv
 
     private fun setButtonActions() {
@@ -185,7 +172,7 @@ class CityButton(val city: CityInfo, private val tileGroup: WorldTileGroup): Tab
         }
         val iconTable = IconTable()
         iconTable.touchable=Touchable.enabled
-        iconTable.background = ImageGetter.getRoundedEdgeRectangle(city.civInfo.nation.getOuterColor())
+        iconTable.background = ImageGetter.getRoundedEdgeRectangle(city.civInfo.nation.getOuterColor()).apply { setMinSize(45f,50f) }
 
         if (city.isInResistance()) {
             val resistanceImage = ImageGetter.getImage("StatIcons/Resistance")
